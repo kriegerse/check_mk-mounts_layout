@@ -1,0 +1,41 @@
+#!/bin/env python
+# -*- encoding: utf-8; py-indent-offset: 4 -*-
+
+#
+# (c) 2017 Sebastian Krieger <s_krieger@web.de>
+#
+
+
+# This is free software;  you can redistribute it and/or modify it
+# under the  terms of the  GNU General Public License  as published by
+# the Free Software Foundation in version 2.  check_mk is  distributed
+# in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
+# out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
+# PARTICULAR PURPOSE. See the  GNU General Public License for more de-
+# ails.  You should have  received  a copy of the  GNU  General Public
+# License along with GNU Make; see the file  COPYING.  If  not,  write
+# to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
+# Boston, MA 02110-1301 USA.
+
+# Example Output:
+# <<<cifsmounts>>>
+# /cifs_share ok 19897054 19594958 18578485 4096
+
+# helper check cifs
+def check_mount_layout_cifs(item, params, info):
+    mounts=info.keys()
+    thresholds=params.get("cifs")
+    result = check_mount_layout_main(thresholds, mounts)
+    return result
+
+
+check_info["cifsmounts.layout"] = {
+        'check_function':       check_mount_layout_cifs,
+        'inventory_function':   inventory_mount_layout,
+        'service_description':  'Mount layout CIFS',
+        'has_perfdata':         False,
+        'group':                'mount_layout',
+        'default_levels_variable': 'mount_default_levels',
+        'includes':             [ 'mounts_layout.include' ],
+}
+

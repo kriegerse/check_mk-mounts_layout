@@ -5,7 +5,7 @@ distribution: https://github.com/kriegerse/check_mk-mounts_layout
 author: Sebastian Krieger <s_krieger@web.de>
 license: GPL 
 description:
-  This check allows to monitor the presence of defined block device mountpoints
+  This check allows to monitor the presence of defined mountpoints
   on a host. 
    
   If thresholds are defined and all are found for the specific mount type, 
