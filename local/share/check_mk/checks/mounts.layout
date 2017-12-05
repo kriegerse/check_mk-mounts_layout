@@ -1,87 +1,13 @@
 #!/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
-import re 
 
-factory_settings["mount_default_levels"] = { 
-	"blockdev": [],
-	"nfs":[],
-	"cifs": [],
-}
-
-
-# inventoy always return, 
-# since we need to check for missing mounts even for empty sections
-def inventory_mount_layout(info):
-    return [ (None, {}) ]
-	
-	
 # helper check blockdev
 def check_mount_layout_blockdev(item, params, info):
-    result = check_mount_layout_main(item, params, info, "blockdev")
+    mounts=[mountpoint[1] for mountpoint in info]
+    thresholds=params.get("blockdev")
+    #result = check_mount_layout_main(item, params, info, "blockdev")
+    result = check_mount_layout_main(thresholds, mounts)
     return result
-
-# helper check nfs
-def check_mount_layout_nfs(item, params, info):
-    result = check_mount_layout_main(item, params, info, "nfs")
-    return result
-
-# helper check cifs
-def check_mount_layout_cifs(item, params, info):
-    result = check_mount_layout_main(item, params, info, "cifs")
-    return result
-
-
-# check logic goes here 
-def check_mount_layout_main(item, params, info, mode):
-    thresholds=params.get(mode)
-    mounts = list()
-    ok_code = 0 
-    output = list()
-    # generate list of mountpoints 
-    if mode == "blockdev":
-        mounts=[item[1] for item in info]
-    else:
-        mounts=info.keys()
-
-    # if no thresholds and no mountpoints from agent 
-    if len(thresholds) == 0 and len(mounts) == 0:
-        return (ok_code, "no mounts found")
-
-    for i in thresholds:
-        r = re.compile("^" + str(i) + "$")
-	# check if we match the threshold in mounts
-	if not filter(r.match, mounts):
-	   ok_code = 2 
-           output.append(i)
-
-    if ok_code == 0 and len(thresholds) != 0:
-	return (ok_code, "all defined mounts found")
-    elif ok_code == 0 and len(thresholds) == 0: 
-	return (ok_code, "found mountpoints but none defined to monitor")
-    else:
-        return (ok_code, "missing mount(s): " + ', '.join(output) + " (!!)")
-
-
-check_info["cifsmounts.layout"] = {
-        'check_function':       check_mount_layout_cifs,
-        'inventory_function':   inventory_mount_layout,
-        'service_description':  'Mount layout CIFS',
-        'has_perfdata':         False,
-        'group':                'mount_layout',
-        'default_levels_variable': 'mount_default_levels',
-	'includes':		[ 'cifsmounts' ],
-}
-
-
-check_info["nfsmounts.layout"] = {
-        'check_function':       check_mount_layout_nfs,
-        'inventory_function':   inventory_mount_layout,
-        'service_description':  'Mount layout NFS',
-        'has_perfdata':         False,
-        'group':                'mount_layout',
-        'default_levels_variable': 'mount_default_levels',
-	'includes':		[ 'nfsmounts' ],
-}
 
 
 check_info["mounts.layout"] = {
@@ -91,5 +17,6 @@ check_info["mounts.layout"] = {
 	'has_perfdata':		False,
 	'group':		'mount_layout',
 	'default_levels_variable': 'mount_default_levels',
-        'includes':		[ 'mounts' ],
+        'includes':		[ 'mounts_layout.include' ],
 }
+

@@ -1,0 +1,41 @@
+#!/bin/env python
+# -*- encoding: utf-8; py-indent-offset: 4 -*-
+
+# some factory settings
+factory_settings["mount_default_levels"] = {
+        "blockdev": [],
+        "nfs":[],
+        "cifs": [],
+}
+
+
+# inventoy always return, since we need 
+# to check for missing mounts even for empty sections
+def inventory_mount_layout(info):
+    return [ (None, {}) ]
+
+
+# check logic goes here 
+def check_mount_layout_main(thresholds, mounts):
+    ok_code = 0
+    output = list()
+
+    # if no thresholds and no mountpoints from agent return immediate 
+    if len(thresholds) == 0 and len(mounts) == 0:
+        return (ok_code, "no mounts found")
+
+    # check if we match the threshold in mounts
+    for i in thresholds:
+        reg = regex("^" + str(i) + "$")
+        if not filter(reg.match, mounts):
+           ok_code = 2
+           output.append(i)
+
+    # generate results 
+    if ok_code == 0 and len(thresholds) != 0:
+        return (ok_code, "all defined mounts found")
+    elif ok_code == 0 and len(thresholds) == 0:
+        return (ok_code, "found mountpoints but none defined to monitor")
+    else:
+        return (ok_code, "missing mount(s): " + ', '.join(output) + " (!!)")
+
