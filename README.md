@@ -7,6 +7,5 @@ in a the agent output an alert is thrown.
 
 License: GPLv2  https://www.gnu.org/licenses/gpl-2.0.html
 
-
 ## WATO integration
 [wato](documentation/mounts_layout_wato.png)
