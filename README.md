@@ -16,8 +16,8 @@ License: GPLv2  https://www.gnu.org/licenses/gpl-2.0.html
 
 ## Alerting
 * the check will stay okay if:
- * mountpoints are found, but no rule is defined
- * all defined mountpoints are presend
+  * mountpoints are found, but no rule is defined
+  * all defined mountpoints are presend
 * an alerts will be thrown if a mount point is defined in a wato rule but not present
 
 ![checks](documentation/mounts_layout_checks.png)
