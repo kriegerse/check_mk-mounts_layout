@@ -5,7 +5,7 @@ The check basically parses the mounts, nfsmounts and cifsmounts section of the s
 It compares the found mountpoints against defined mountpoints (thresholds). If a defined threshold is missing
 in a the agent output an alert is thrown.
 
-License: GPLv2  https://www.gnu.org/licenses/gpl-2.0.html
+License: [GPLv2](LICENSE)  
 
 
 ## WATO integration
