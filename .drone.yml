@@ -4,8 +4,22 @@ type: docker
 name: default
 
 steps:
-- name: linter
-  image: python:2.7.16-buster
+- name: pylint
+  image: kriegerse/cmk:cmk150-latest
   commands:
-  - df -haP
   - ls -al /drone/src
+  - sudo -u cmk pwd ls 
+
+
+image_pull_secrets:
+- dockerconfig
+#- name: flake8
+# image: python:2.7.16-buster
+# commands:
+#   - pip install flake8
+#   - which flake8
+
+# - name: linter
+#   image:
+#   commands:
+#     - sudo -u cmk pylint
