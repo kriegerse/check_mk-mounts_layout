@@ -1,0 +1,11 @@
+---
+kind: pipeline
+type: docker
+name: default
+
+steps:
+- name: linter
+  image: python:2.7.16-buster
+  commands:
+  - df -haP
+  - ls -al /drone/src
